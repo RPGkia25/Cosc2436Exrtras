@@ -1,0 +1,99 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+struct ListNode{
+    int data;
+    ListNode *next;
+    ListNode(int x):data(x), next(nullptr){}
+};
+
+class Solution {
+public:
+        ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode dummy(0);
+        ListNode* tail = &dummy;
+
+        while (l1 && l2) {
+            if (l1->data < l2->data) {
+                tail->next = l1;
+                l1 = l1->next;
+            } else {
+                tail->next = l2;
+                l2 = l2->next;
+            }
+            tail = tail->next;
+        }
+
+        if (l1) tail->next = l1;
+        if (l2) tail->next = l2;
+
+        return dummy.next;
+    }
+
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        if (lists.empty()) return nullptr;
+
+            int n = lists.size();
+
+            while (n > 1) {
+                vector<ListNode*> mergedLists;
+
+                for (int i = 0; i < n; i += 2) {
+                    ListNode* l1 = lists[i];
+                    ListNode* l2 = (i + 1 < n) ? lists[i + 1] : nullptr;
+
+                    mergedLists.push_back(mergeTwoLists(l1, l2));
+                }
+
+                lists = mergedLists;
+                n = lists.size();
+            }
+
+            return lists[0];
+    }   
+};
+
+ListNode* buildList(const vector<int>& arr)
+{
+    ListNode* head = nullptr;
+    ListNode* tail = nullptr;
+
+    for (int num : arr) {
+        ListNode* newNode = new ListNode(num);
+        if (!head) {
+               head = tail = newNode;
+        } else {
+            tail->next = newNode;
+            tail = newNode;
+        }
+    }
+
+    return head;
+}
+
+void printList(ListNode* head) {
+    while (head) {
+        cout << head->data << " ";
+        head = head->next;
+        }
+    cout << endl;
+}
+
+int main()
+{
+    vector<int> listOne = {1,4,5};
+    vector<int> listTwo = {1,3,4};
+    vector<int> listThree = {2,6};
+
+    ListNode* l1 = buildList(listOne);
+    ListNode* l2 = buildList(listTwo);
+    ListNode* l3 = buildList(listThree);
+
+    vector<ListNode*> lists = {l1, l2, l3};
+
+    Solution sol;
+    ListNode* merged = sol.mergeKLists(lists);
+
+    printList(merged);
+}
