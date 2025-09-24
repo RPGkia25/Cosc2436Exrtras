@@ -76,12 +76,12 @@ bool has_cycle(SinglyLinkedListNode* head) {
         return 0;
     }
 
-    SinglyLinkedListNode *fast;
-    SinglyLinkedListNode *slow;
+    SinglyLinkedListNode *fast = head;
+    SinglyLinkedListNode *slow = head;
 
     while(fast != nullptr && fast->next != nullptr){
-        slow->next;
-        fast->next->next;
+        slow = slow->next;
+        fast = fast->next->next;
 
         if(fast == slow){
             return 1;
@@ -141,3 +141,4 @@ int main()
 
     return 0;
 }
+
